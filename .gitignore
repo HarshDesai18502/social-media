@@ -1,0 +1,9 @@
+node_modules
+package-lock.json
+.env
+.prettierrc.json
+.eslintrc.json
+customer-error.log
+customer.log
+logger.js
+README.md

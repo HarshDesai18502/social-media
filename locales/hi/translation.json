@@ -1,0 +1,5 @@
+{
+    "post_create_success": "पोस्ट बन गयी है ",
+    "post_update_success": "पोस्ट अपडेट हो गयी है ",
+    "post_delete_success": "पोस्ट डिलीट हो गयी है "
+}
