@@ -1,13 +1,13 @@
-const path = require("path");
+const path = require('path');
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const multer = require("multer");
-const i18next = require("i18next");
-const Backend = require("i18next-fs-backend");
-const middleware = require("i18next-http-middleware");
-const dotenv = require("dotenv");
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const i18next = require('i18next');
+const Backend = require('i18next-fs-backend');
+const middleware = require('i18next-http-middleware');
+const dotenv = require('dotenv');
 const logger = require('./logger');
 
 i18next
@@ -16,8 +16,8 @@ i18next
   .init({
     fallbackLng: `en`,
     backend: {
-      loadPath: `./locales/{{lng}}/translation.json`,
-    },
+      loadPath: `./locales/{{lng}}/translation.json`
+    }
   });
 
 dotenv.config();
@@ -27,18 +27,18 @@ app.use(middleware.handle(i18next));
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    cb(null, 'images');
   },
   filename: (req, file, cb) => {
-    cb(null, `${new Date().toISOString()  }-${  file.originalname}`);
-  },
+    cb(null, `${new Date().toISOString()}-${file.originalname}`);
+  }
 });
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
   } else {
@@ -47,26 +47,26 @@ const fileFilter = (req, file, cb) => {
 };
 
 app.use(bodyParser.json());
-app.use(multer({ storage: fileStorage, fileFilter }).single("imageUrl"));
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(multer({ storage: fileStorage, fileFilter }).single('imageUrl'));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-const feedRoutes = require("./routes/feed");
-const authRoutes = require("./routes/auth");
+const postRoutes = require('./routes/post');
+const authRoutes = require('./routes/auth');
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
-app.use(feedRoutes);
+app.use(postRoutes);
 app.use(authRoutes);
 
 // For Incorrect Url
 app.use((req, res) => {
   res.status(404).json({
-    message: "Page Not Found",
+    message: 'Page Not Found'
   });
 });
 
@@ -77,7 +77,7 @@ app.use((error, req, res) => {
 
   res.status(status).json({
     message,
-    data,
+    data
   });
 });
 
@@ -85,7 +85,8 @@ mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => {
     app.listen(process.env.PORT);
+    console.log('connected');
   })
   .catch(() => {
-    logger.customerLogger.log('error', 'Error while connecting to database')
+    logger.customerLogger.log('error', 'Error while connecting to database');
   });

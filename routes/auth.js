@@ -1,39 +1,43 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
-const { body } = require("express-validator");
 
-const User = require("../models/user");
+const {
+  registerValidatior,
+  updateValidatior,
+  loginValidatior,
+  uniqueFieldChecker
+} = require('../validation/userValidator');
 
-const { registerUser, login, deleteUser } = require("../controllers/auth");
-const isAuth = require("../middleware/isAuth");
+const {
+  registerUser,
+  login,
+  updateUser,
+  deleteUser
+} = require('../controllers/auth');
+const isAuth = require('../middleware/isAuth');
 
+// create user
 router.post(
-  "/register-user",
-  [
-    body("name")
-      .trim()
-      .not()
-      .isEmpty()
-      .withMessage("Please Enter correct name"),
-    body("email")
-      .isEmail()
-      .withMessage("Please Enter Valid Email")
-      .custom((value) => User.findOne({ email: value }).then((user) => {
-          if (user) {
-            throw new Error("User already Exist, select a different Email");
-          }
-        })),
-    body("password")
-      .trim()
-      .isLength({ min: 5 })
-      .withMessage("Password should be minimum of length 5"),
-  ],
+  '/register-user',
+  registerValidatior,
+  uniqueFieldChecker,
   registerUser
 );
 
-router.post("/login", login);
+// login
+router.post('/login', loginValidatior, login);
 
-router.delete("/delete-user", isAuth, deleteUser);
+// update user
+router.put(
+  '/update-user',
+  isAuth,
+  updateValidatior,
+  uniqueFieldChecker,
+  updateUser
+);
+
+// delete user
+router.delete('/delete-user', isAuth, deleteUser);
 
 module.exports = router;

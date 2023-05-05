@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { validationResult } = require('express-validator');
+// const { validationResult } = require('express-validator');
 const logger = require('../logger');
 
 const Post = require('../models/post');
@@ -10,13 +10,13 @@ const User = require('../models/user');
 const createPost = async (req, res, next) => {
   const { title, content } = req.body;
 
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation Failed, please input correct values');
-    error.statusCode = 422;
-    throw error;
-  }
+  // if (!errors.isEmpty()) {
+  //   const error = new Error('Validation Failed, please input correct values');
+  //   error.statusCode = 422;
+  //   throw error;
+  // }
 
   if (!req.file) {
     const error = new Error('No image provided');
