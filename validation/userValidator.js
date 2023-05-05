@@ -11,16 +11,18 @@ const uniqueFieldChecker = async (req, res, next) => {
     $or: [{ userName: req.body.userName }, { email: req.body.email }]
   });
 
-  if (user.email === req.body.email) {
-    return res
-      .status(400)
-      .json({ error: 'User with this email already Exist.' });
-  }
+  if (user) {
+    if (user.email === req.body.email) {
+      return res
+        .status(400)
+        .json({ error: 'User with this email already Exist.' });
+    }
 
-  if (user.userName === req.body.userName) {
-    return res
-      .status(400)
-      .json({ error: 'User with this userName already Exist.' });
+    if (user.userName === req.body.userName) {
+      return res
+        .status(400)
+        .json({ error: 'User with this userName already Exist.' });
+    }
   }
 
   return next();
