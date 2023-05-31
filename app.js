@@ -8,7 +8,13 @@ const i18next = require('i18next');
 const Backend = require('i18next-fs-backend');
 const middleware = require('i18next-http-middleware');
 const dotenv = require('dotenv');
+const swaggerUi = require('swagger-ui-express');
+// const YAML = require('yamljs');
+const swaggerJsdoc = require('swagger-jsdoc');
 const logger = require('./logger');
+
+// const swaggerJsdoc = YAML.load('./api.yaml');
+// console.log(swaggerJsdoc);
 
 i18next
   .use(Backend)
@@ -50,6 +56,17 @@ app.use(bodyParser.json());
 app.use(multer({ storage: fileStorage, fileFilter }).single('imageUrl'));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+const swaggerOptions = {
+  // eslint-disable-next-line global-require
+  swaggerDefinition: require('./swagger.json'),
+  apis: ['app.js']
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc));
+
 const postRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
 
@@ -84,7 +101,7 @@ app.use((error, req, res) => {
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => {
-    app.listen(process.env.PORT);
+    app.listen(process.env.PORT, async () => {});
   })
   .catch(() => {
     logger.customerLogger.log('error', 'Error while connecting to database');

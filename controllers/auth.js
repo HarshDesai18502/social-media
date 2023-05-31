@@ -6,7 +6,6 @@ const Post = require('../models/post');
 const User = require('../models/user');
 const logger = require('../logger');
 
-
 // To create a User
 const registerUser = async (req, res, next) => {
   try {
@@ -29,9 +28,14 @@ const registerUser = async (req, res, next) => {
       status,
       dateOfBirth
     });
+    const reponseObject = {
+      name: user.name,
+      email: user.email,
+      UserName: user.userName
+    };
     res.status(201).json({
       message: 'User Created Successfully',
-      user
+      reponseObject
     });
   } catch (err) {
     if (!err.statusCode) {

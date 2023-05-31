@@ -1,0 +1,17 @@
+swagger: '2.0'
+info:
+  title: 'Social media app'
+  description: 'This is a social media app, where user can post photos can add like and add comments on those photos, he can follow other users as well.'
+  version: 1.0
+  contact:
+    email: harshdesai18502@gmail.com
+  licence:
+    name: Apache 2.0
+    url: "http://apache.org"
+schemes: ['http']
+path:
+  /posts:
+    get:
+      summary: 'To get all the posts'
+      decsription
+
