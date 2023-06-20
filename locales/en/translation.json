@@ -1,0 +1,5 @@
+{
+    "post_create_success": "Post created successfully",
+    "post_update_success": "Post updated successfully",
+    "post_delete_success": "Post deleted successfully"
+}
